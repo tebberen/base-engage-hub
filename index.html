@@ -23,6 +23,7 @@
       max-width: 1400px;
       width: 100%;
       gap: 30px;
+      align-items: flex-start;
     }
     .sidebar {
       width: 300px;
@@ -41,6 +42,8 @@
       border-radius: 10px;
       margin-bottom: 20px;
       text-align: center;
+      width: 100%;
+      max-width: 1400px;
     }
     .subheader {
       margin: 15px 0 30px 0;
@@ -48,6 +51,7 @@
       color: #1d4ed8;
       font-weight: bold;
       text-align: center;
+      width: 100%;
     }
     .link-card {
       border: 2px solid #1d4ed8;
@@ -102,12 +106,13 @@
       font-size: 16px;
     }
     .wallet-info {
-      margin: 15px 0;
+      margin: 0 0 20px 0;
       padding: 15px;
       background-color: #dbeafe;
       border-radius: 10px;
       font-weight: bold;
       border: 2px solid #1d4ed8;
+      text-align: center;
     }
     .connect-btn {
       background: #10b981;
@@ -136,17 +141,19 @@
       display: inline-block;
     }
     .step-indicator {
-      margin: 25px 0;
+      margin: 0 0 20px 0;
       font-weight: bold;
       color: #1d4ed8;
       font-size: 20px;
+      text-align: center;
     }
     .step-container {
       background: #f8fafc;
       border: 2px solid #1d4ed8;
       padding: 25px;
-      margin: 25px auto;
       border-radius: 12px;
+      text-align: center;
+      height: fit-content;
     }
     .hidden {
       display: none !important;
@@ -171,6 +178,7 @@
       color: #065f46;
       font-weight: bold;
       max-width: 600px;
+      text-align: center;
     }
     .link-stats {
       display: flex;
@@ -196,6 +204,7 @@
       margin: 20px auto;
       border-radius: 12px;
       max-width: 600px;
+      text-align: center;
     }
     .gas-info {
       background: #e0f2fe;
@@ -204,13 +213,14 @@
       margin: 10px 0;
       font-size: 14px;
       color: #1d4ed8;
+      text-align: center;
     }
     .base-ecosystem {
       background: #1d4ed8;
       color: white;
       padding: 20px;
       border-radius: 12px;
-      margin-bottom: 30px;
+      height: fit-content;
     }
     .base-ecosystem h3 {
       margin: 0 0 15px 0;
@@ -236,6 +246,21 @@
       margin-right: 10px;
       font-size: 18px;
     }
+    .wallet-address {
+      background: #dbeafe;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      border: 2px solid #1d4ed8;
+      text-align: center;
+    }
+    .main-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -248,6 +273,11 @@
   <div class="container">
     <!-- Left Sidebar - Base Ecosystem Links -->
     <div class="sidebar">
+      <!-- Wallet Address -->
+      <div id="walletInfo" class="wallet-address hidden">
+        ✅ Connected: <span id="walletAddress"></span>
+      </div>
+
       <div class="base-ecosystem">
         <h3>🌐 Base Ecosystem</h3>
         <a href="https://base.org" target="_blank" class="base-link">
@@ -278,64 +308,63 @@
           <span class="base-link-icon">💰</span>Coinbase Layer2
         </a>
       </div>
-
-      <!-- Wallet Connection in Sidebar -->
-      <div>
-        <button id="connectWalletBtn" class="connect-btn">🔗 Connect MetaMask</button>
-        <div id="walletInfo" class="wallet-info hidden">
-          ✅ Connected: <span id="walletAddress"></span>
-        </div>
-      </div>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-      <!-- Step 1: Support Required -->
-      <div id="step1">
-        <div class="step-indicator">
-          <span class="step-number">1</span> Support Community Members
-        </div>
-        <div class="step-container">
-          <h3>📋 Support Others First</h3>
-          <p>To submit your link, you must first support at least one community member</p>
-          
-          <div class="links-grid" id="linksContainer">
-            <!-- Links will be loaded here dynamically -->
+      <div class="main-sections">
+        <!-- Step 1: Support Required -->
+        <div id="step1">
+          <div class="step-indicator">
+            <span class="step-number">1</span> Support Community Members
+          </div>
+          <div class="step-container">
+            <h3>📋 Support Others First</h3>
+            <p>To submit your link, you must first support at least one community member</p>
+            
+            <div class="links-grid" id="linksContainer">
+              <!-- Links will be loaded here dynamically -->
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Step 2: Submit Your Link -->
-      <div id="step2" class="hidden">
-        <div class="step-indicator">
-          <span class="step-number">2</span> Submit Your Link
-        </div>
-        
-        <div class="success-message">
-          ✅ Thank you for supporting! Now you can submit your own link
-        </div>
-        
-        <div class="submit-form">
-          <h3>🎉 Add Your Content</h3>
-          <input type="text" placeholder="Paste your X, Farcaster, GitHub, or any other link here..." id="userLink" />
-          <br>
-          <div class="gas-info">
-            ⛽ You'll only pay the normal network gas fee (no extra cost)
+        <!-- Community Links Section -->
+        <div>
+          <div class="step-indicator">
+            🌟 Community Links (Newest First)
           </div>
-          <button id="submitLinkBtn">✍️ Submit Link</button>
-          <p><small>🔒 Secure transaction on Base network</small></p>
+          <div class="links-grid" id="submittedLinks">
+            <!-- Submitted links will appear here -->
+          </div>
         </div>
-      </div>
-
-      <!-- Community Links Section -->
-      <div class="step-indicator">
-        🌟 Community Links (Newest First)
-      </div>
-      <div class="links-grid" id="submittedLinks">
-        <!-- Submitted links will appear here -->
       </div>
     </div>
   </div>
+
+  <!-- Step 2: Submit Your Link -->
+  <div id="step2" class="hidden">
+    <div class="step-indicator">
+      <span class="step-number">2</span> Submit Your Link
+    </div>
+    
+    <div class="success-message">
+      ✅ Thank you for supporting! Now you can submit your own link
+    </div>
+    
+    <div class="submit-form">
+      <h3>🎉 Add Your Content</h3>
+      <input type="text" placeholder="Paste your X, Farcaster, GitHub, or any other link here..." id="userLink" />
+      <br>
+      <div class="gas-info">
+        ⛽ You'll only pay the normal network gas fee (no extra cost)
+      </div>
+      <button id="submitLinkBtn">✍️ Submit Link</button>
+      <p><small>🔒 Secure transaction on Base network</small></p>
+    </div>
+  </div>
+
+  <!-- Connect butonu artık ana içerikte, header'ın altında -->
+  <button id="connectWalletBtn" class="connect-btn">🔗 Connect MetaMask</button>
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script>
@@ -472,8 +501,7 @@
         document.getElementById('walletAddress').textContent = 
           `${userAddress.substring(0, 6)}...${userAddress.substring(userAddress.length - 4)}`;
         document.getElementById('walletInfo').classList.remove('hidden');
-        document.getElementById('connectWalletBtn').textContent = '✅ Connected';
-        document.getElementById('connectWalletBtn').disabled = true;
+        document.getElementById('connectWalletBtn').style.display = 'none';
         
         isConnected = true;
         return true;
@@ -605,8 +633,7 @@
               document.getElementById('walletAddress').textContent = 
                 `${userAddress.substring(0, 6)}...${userAddress.substring(userAddress.length - 4)}`;
               document.getElementById('walletInfo').classList.remove('hidden');
-              document.getElementById('connectWalletBtn').textContent = '✅ Connected';
-              document.getElementById('connectWalletBtn').disabled = true;
+              document.getElementById('connectWalletBtn').style.display = 'none';
               
               isConnected = true;
             }
