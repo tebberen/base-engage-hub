@@ -49,7 +49,7 @@
   <header>Base Engage Hub</header>
   <div class="subheader">If you want support, support first</div>
 
-  <button onclick="connectWallet()">Connect Wallet</button>
+  <button id="connectWalletBtn">Connect Wallet</button>
 
   <h2>Support Links</h2>
   <div class="link-card">
@@ -61,48 +61,35 @@
   <input type="text" placeholder="Paste your link here" />
   <button>Submit & Publish</button>
 
-  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script>
-    const CONTRACT_ADDRESS = "0x9c05bea4a19de45fe9c8c5541dd4ec6c500f2f3f";
-    const CONTRACT_ABI = [
-      {
-        "inputs": [],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-      },
-      {
-        "inputs": [],
-        "name": "sendSupport",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-      }
-    ];
-
     let provider;
     let signer;
-    let contract;
 
     async function connectWallet() {
-      if(window.ethereum) {
-        provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        signer = provider.getSigner();
-        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-        alert("Wallet connected!");
+      if (window.ethereum) {
+        try {
+          provider = new ethers.providers.Web3Provider(window.ethereum);
+          await provider.send("eth_requestAccounts", []);
+          signer = provider.getSigner();
+          alert("Wallet connected: " + await signer.getAddress());
+        } catch (err) {
+          alert("Connection rejected or error: " + err.message);
+        }
       } else {
-        alert("MetaMask is not installed");
+        alert("MetaMask is not installed or not detected");
       }
     }
 
-    async function sendSupport() {
-      if(!contract) {
+    function sendSupport() {
+      if (!signer) {
         alert("Connect your wallet first!");
         return;
       }
-      // Şu an ücretsiz, sadece cüzdan bağlı mı kontrol ediyor
       alert("Support function triggered (free mode, no ETH sent).");
     }
+
+    document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
   </script>
 </body>
 </html>
