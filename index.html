@@ -50,51 +50,62 @@
   <header>Base Engage Hub</header>
   <div class="subheader">If you want support, support first</div>
 
-  <button id="connectWalletBtn">Connect Wallet</button>
-
   <h2>Support Links</h2>
   <div class="link-card">
     <p>https://twitter.com/example/post</p>
-    <button onclick="sendSupport()">Support</button>
+    <button class="supportBtn" data-link="https://twitter.com/example/post">Support</button>
   </div>
 
   <h2>Add Your Link</h2>
-  <input type="text" placeholder="Paste your link here" />
-  <button>Submit & Publish</button>
+  <input type="text" placeholder="Paste your link here" id="userLink" />
+  <button id="submitLinkBtn">Submit & Publish</button>
 
-  <!-- Ethers.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script>
+    const CONTRACT_ADDRESS = "0x9c05bea4a19de45fe9c8c5541dd4ec6c500f2f3f"; // SupportHub.sol adresin
     let provider;
     let signer;
 
-    async function connectWallet() {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          provider = new ethers.providers.Web3Provider(window.ethereum);
-          await provider.send("eth_requestAccounts", []);
-          signer = provider.getSigner();
-          alert("Wallet connected: " + await signer.getAddress());
-        } catch (err) {
-          alert("Connection rejected or error: " + err.message);
-        }
-      } else {
-        alert("MetaMask is not installed or not detected");
-      }
-    }
+    // Support butonları → sadece yönlendirme / alert
+    document.querySelectorAll(".supportBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const link = btn.getAttribute("data-link");
+        // Şu an için alert veya yeni sekmede aç
+        window.open(link, "_blank");
+      });
+    });
 
-    function sendSupport() {
-      if (!signer) {
-        alert("Connect your wallet first!");
+    // Submit & Publish → MetaMask ile Base ağında TX
+    async function submitLink() {
+      if (typeof window.ethereum === 'undefined') {
+        alert("MetaMask not detected. Please install it.");
         return;
       }
-      alert("Support function triggered (free mode, no ETH sent).");
+
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+
+      const userLink = document.getElementById("userLink").value;
+      if (!userLink) {
+        alert("Please enter your link first.");
+        return;
+      }
+
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, [
+        "function submitLink(string memory _link) public"
+      ], signer);
+
+      try {
+        const tx = await contract.submitLink(userLink, { gasLimit: 200000 });
+        await tx.wait();
+        alert("Your link has been submitted successfully!");
+      } catch (err) {
+        alert("Transaction failed: " + err.message);
+      }
     }
 
-    // Buton render edildikten sonra listener ekle
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
-    });
+    document.getElementById("submitLinkBtn").addEventListener("click", submitLink);
   </script>
 </body>
 </html>
