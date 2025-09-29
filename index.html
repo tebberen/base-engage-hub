@@ -11,10 +11,26 @@
     body {
       background-color: #ffffff;
       font-family: Arial, sans-serif;
-      text-align: center;
       color: #1d4ed8;
       margin: 0;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      display: flex;
+      max-width: 1400px;
+      width: 100%;
+      gap: 30px;
+    }
+    .sidebar {
+      width: 300px;
+      flex-shrink: 0;
+    }
+    .main-content {
+      flex: 1;
+      text-align: center;
     }
     header {
       background: #1d4ed8;
@@ -24,12 +40,14 @@
       font-weight: bold;
       border-radius: 10px;
       margin-bottom: 20px;
+      text-align: center;
     }
     .subheader {
       margin: 15px 0 30px 0;
       font-size: 18px;
       color: #1d4ed8;
       font-weight: bold;
+      text-align: center;
     }
     .link-card {
       border: 2px solid #1d4ed8;
@@ -52,7 +70,6 @@
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
       margin: 20px auto;
-      max-width: 1200px;
     }
     button {
       background: #1d4ed8;
@@ -129,8 +146,6 @@
       border: 2px solid #1d4ed8;
       padding: 25px;
       margin: 25px auto;
-      width: 90%;
-      max-width: 1000px;
       border-radius: 12px;
     }
     .hidden {
@@ -174,17 +189,6 @@
       font-size: 18px;
       color: #1d4ed8;
     }
-    .support-count {
-      background: #f59e0b;
-      color: white;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-left: 10px;
-    }
     .submit-form {
       background: #f8fafc;
       border: 2px solid #1d4ed8;
@@ -192,6 +196,45 @@
       margin: 20px auto;
       border-radius: 12px;
       max-width: 600px;
+    }
+    .gas-info {
+      background: #e0f2fe;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1d4ed8;
+    }
+    .base-ecosystem {
+      background: #1d4ed8;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+    .base-ecosystem h3 {
+      margin: 0 0 15px 0;
+      font-size: 20px;
+      text-align: center;
+    }
+    .base-link {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin: 8px 0;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    .base-link:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateX(5px);
+    }
+    .base-link-icon {
+      margin-right: 10px;
+      font-size: 18px;
     }
   </style>
 </head>
@@ -202,54 +245,96 @@
   
   <div class="subheader">If you want support, support first</div>
 
-  <!-- Wallet Connection -->
-  <div>
-    <button id="connectWalletBtn" class="connect-btn">🔗 Connect MetaMask</button>
-    <div id="walletInfo" class="wallet-info hidden">
-      ✅ Connected: <span id="walletAddress"></span>
-    </div>
-  </div>
+  <div class="container">
+    <!-- Left Sidebar - Base Ecosystem Links -->
+    <div class="sidebar">
+      <div class="base-ecosystem">
+        <h3>🌐 Base Ecosystem</h3>
+        <a href="https://base.org" target="_blank" class="base-link">
+          <span class="base-link-icon">🏠</span>Base Official
+        </a>
+        <a href="https://docs.base.org" target="_blank" class="base-link">
+          <span class="base-link-icon">📚</span>Base Documentation
+        </a>
+        <a href="https://bridge.base.org" target="_blank" class="base-link">
+          <span class="base-link-icon">🌉</span>Base Bridge
+        </a>
+        <a href="https://explorer.base.org" target="_blank" class="base-link">
+          <span class="base-link-icon">🔍</span>Base Explorer
+        </a>
+        <a href="https://x.com/base" target="_blank" class="base-link">
+          <span class="base-link-icon">🐦</span>Base Twitter
+        </a>
+        <a href="https://warpcast.com/~/channel/base" target="_blank" class="base-link">
+          <span class="base-link-icon">🔮</span>Base Farcaster
+        </a>
+        <a href="https://github.com/base-org" target="_blank" class="base-link">
+          <span class="base-link-icon">💻</span>Base GitHub
+        </a>
+        <a href="https://base.mirror.xyz" target="_blank" class="base-link">
+          <span class="base-link-icon">📝</span>Base Mirror
+        </a>
+        <a href="https://www.coinbase.com/layer2" target="_blank" class="base-link">
+          <span class="base-link-icon">💰</span>Coinbase Layer2
+        </a>
+      </div>
 
-  <!-- Step 1: Support Required -->
-  <div id="step1">
-    <div class="step-indicator">
-      <span class="step-number">1</span> Support Community Members
-    </div>
-    <div class="step-container">
-      <h3>📋 Support Others First</h3>
-      <p>To submit your link, you must first support at least one community member</p>
-      
-      <div class="links-grid" id="linksContainer">
-        <!-- Links will be loaded here dynamically -->
+      <!-- Wallet Connection in Sidebar -->
+      <div>
+        <button id="connectWalletBtn" class="connect-btn">🔗 Connect MetaMask</button>
+        <div id="walletInfo" class="wallet-info hidden">
+          ✅ Connected: <span id="walletAddress"></span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Step 2: Submit Your Link -->
-  <div id="step2" class="hidden">
-    <div class="step-indicator">
-      <span class="step-number">2</span> Submit Your Link
-    </div>
-    
-    <div class="success-message">
-      ✅ Thank you for supporting! Now submit your link (0.001 ETH fee)
-    </div>
-    
-    <div class="submit-form">
-      <h3>🎉 Add Your Content</h3>
-      <input type="text" placeholder="Paste your X, Farcaster, GitHub, or any other link here..." id="userLink" />
-      <br>
-      <button id="submitLinkBtn">✍️ Submit Link (0.001 ETH)</button>
-      <p><small>💰 Small fee helps prevent spam and rewards the community</small></p>
-    </div>
-  </div>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Step 1: Support Required -->
+      <div id="step1">
+        <div class="step-indicator">
+          <span class="step-number">1</span> Support Community Members
+        </div>
+        <div class="step-container">
+          <h3>📋 Support Others First</h3>
+          <p>To submit your link, you must first support at least one community member</p>
+          
+          <div class="links-grid" id="linksContainer">
+            <!-- Links will be loaded here dynamically -->
+          </div>
+        </div>
+      </div>
 
-  <!-- Community Links Section -->
-  <div class="step-indicator">
-    🌟 Community Links (Newest First)
-  </div>
-  <div class="links-grid" id="submittedLinks">
-    <!-- Submitted links will appear here -->
+      <!-- Step 2: Submit Your Link -->
+      <div id="step2" class="hidden">
+        <div class="step-indicator">
+          <span class="step-number">2</span> Submit Your Link
+        </div>
+        
+        <div class="success-message">
+          ✅ Thank you for supporting! Now you can submit your own link
+        </div>
+        
+        <div class="submit-form">
+          <h3>🎉 Add Your Content</h3>
+          <input type="text" placeholder="Paste your X, Farcaster, GitHub, or any other link here..." id="userLink" />
+          <br>
+          <div class="gas-info">
+            ⛽ You'll only pay the normal network gas fee (no extra cost)
+          </div>
+          <button id="submitLinkBtn">✍️ Submit Link</button>
+          <p><small>🔒 Secure transaction on Base network</small></p>
+        </div>
+      </div>
+
+      <!-- Community Links Section -->
+      <div class="step-indicator">
+        🌟 Community Links (Newest First)
+      </div>
+      <div class="links-grid" id="submittedLinks">
+        <!-- Submitted links will appear here -->
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
@@ -277,9 +362,8 @@
     // Submitted links with metadata
     let submittedLinks = [];
 
-    // Contract configuration
+    // Contract configuration - NO FEE anymore!
     const CONTRACT_ADDRESS = "0x9c05bea4a19de45fe9c8c5541dd4ec6c500f2f3f";
-    const SUBMIT_FEE = ethers.utils.parseEther("0.001"); // 0.001 ETH fee
 
     // Utility functions
     function getPlatformName(url) {
@@ -434,15 +518,14 @@
       }
 
       try {
-        // Contract interaction with fee
+        // Contract interaction - NO FEE, just gas
         const contract = new ethers.Contract(CONTRACT_ADDRESS, [
-          "function submitLink(string memory _link) public payable",
+          "function submitLink(string memory _link) public",
           "function getSubmissionCount() public view returns (uint256)"
         ], signer);
 
-        // Send transaction with fee
+        // Send transaction with only gas fee
         const tx = await contract.submitLink(userLink, {
-          value: SUBMIT_FEE,
           gasLimit: 100000
         });
         
@@ -463,7 +546,7 @@
         submittedLinks.unshift(newLink);
         displaySubmittedLinks();
         
-        alert(`🎉 Link submitted successfully!\n\n📊 Transaction: ${tx.hash.substring(0, 20)}...\n💰 Fee: 0.001 ETH`);
+        alert(`🎉 Link submitted successfully!\n\n📊 Transaction: ${tx.hash.substring(0, 20)}...\n⛽ Paid only network gas fee`);
         
         // Reset form
         document.getElementById("userLink").value = "";
@@ -476,7 +559,7 @@
         if (error.code === 4001) {
           alert("❌ Transaction rejected by user.");
         } else if (error.code === 'INSUFFICIENT_FUNDS') {
-          alert("❌ Insufficient funds for transaction fee.");
+          alert("❌ Insufficient funds for gas fee.");
         } else {
           alert("❌ Submission failed: " + error.message);
         }
@@ -540,5 +623,3 @@
   </script>
 </body>
 </html>
-```
-Artık linkler düzenli ızgara şeklinde ve sarı kutu olmadan! 🚀
