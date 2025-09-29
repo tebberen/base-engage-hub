@@ -31,7 +31,9 @@
     }
     .main-content {
       flex: 1;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     header {
       background: #1d4ed8;
@@ -74,6 +76,7 @@
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
       margin: 20px auto;
+      width: 100%;
     }
     button {
       background: #1d4ed8;
@@ -113,6 +116,7 @@
       font-weight: bold;
       border: 2px solid #1d4ed8;
       text-align: center;
+      width: 100%;
     }
     .connect-btn {
       background: #10b981;
@@ -146,6 +150,7 @@
       color: #1d4ed8;
       font-size: 20px;
       text-align: center;
+      width: 100%;
     }
     .step-container {
       background: #f8fafc;
@@ -154,6 +159,7 @@
       border-radius: 12px;
       text-align: center;
       height: fit-content;
+      width: 100%;
     }
     .hidden {
       display: none !important;
@@ -179,6 +185,7 @@
       font-weight: bold;
       max-width: 600px;
       text-align: center;
+      width: 100%;
     }
     .link-stats {
       display: flex;
@@ -205,6 +212,7 @@
       border-radius: 12px;
       max-width: 600px;
       text-align: center;
+      width: 100%;
     }
     .gas-info {
       background: #e0f2fe;
@@ -254,21 +262,34 @@
       font-weight: bold;
       border: 2px solid #1d4ed8;
       text-align: center;
+      width: 100%;
     }
     .main-sections {
       display: flex;
       flex-direction: column;
       gap: 30px;
       width: 100%;
+      align-items: center;
+    }
+    .centered-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div>Base Engage Hub</div>
-  </header>
-  
-  <div class="subheader">If you want support, support first</div>
+  <div class="centered-content">
+    <header>
+      <div>Base Engage Hub</div>
+    </header>
+    
+    <div class="subheader">If you want support, support first</div>
+
+    <!-- Connect butonu header'ın altında -->
+    <button id="connectWalletBtn" class="connect-btn">🔗 Connect MetaMask</button>
+  </div>
 
   <div class="container">
     <!-- Left Sidebar - Base Ecosystem Links -->
@@ -314,7 +335,7 @@
     <div class="main-content">
       <div class="main-sections">
         <!-- Step 1: Support Required -->
-        <div id="step1">
+        <div id="step1" class="centered-content">
           <div class="step-indicator">
             <span class="step-number">1</span> Support Community Members
           </div>
@@ -329,7 +350,7 @@
         </div>
 
         <!-- Community Links Section -->
-        <div>
+        <div class="centered-content">
           <div class="step-indicator">
             🌟 Community Links (Newest First)
           </div>
@@ -342,7 +363,7 @@
   </div>
 
   <!-- Step 2: Submit Your Link -->
-  <div id="step2" class="hidden">
+  <div id="step2" class="hidden centered-content">
     <div class="step-indicator">
       <span class="step-number">2</span> Submit Your Link
     </div>
@@ -362,9 +383,6 @@
       <p><small>🔒 Secure transaction on Base network</small></p>
     </div>
   </div>
-
-  <!-- Connect butonu artık ana içerikte, header'ın altında -->
-  <button id="connectWalletBtn" class="connect-btn">🔗 Connect MetaMask</button>
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script>
