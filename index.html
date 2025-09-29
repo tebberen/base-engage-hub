@@ -1,47 +1,108 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Base Engage Hub</title>
+  <style>
+    body {
+      background-color: #ffffff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      color: #1d4ed8;
+    }
+    header {
+      background: #1d4ed8;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .subheader {
+      margin: 10px 0 30px 0;
+      font-size: 18px;
+      color: #1d4ed8;
+    }
+    .link-card {
+      border: 1px solid #1d4ed8;
+      margin: 10px auto;
+      padding: 10px;
+      width: 60%;
+      border-radius: 8px;
+    }
+    button {
+      background: #1d4ed8;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    input {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #1d4ed8;
+      width: 50%;
+    }
+  </style>
+</head>
+<body>
+  <header>Base Engage Hub</header>
+  <div class="subheader">If you want support, support first</div>
 
-contract SupportHub {
-    // Destek gönderenlerin ve toplam miktarın kaydı
-    struct Supporter {
-        address supporter;
-        uint256 amount;
+  <button onclick="connectWallet()">Connect Wallet</button>
+
+  <h2>Support Links</h2>
+  <div class="link-card">
+    <p>https://twitter.com/example/post</p>
+    <button onclick="sendSupport()">Support</button>
+  </div>
+
+  <h2>Add Your Link</h2>
+  <input type="text" placeholder="Paste your link here" />
+  <button>Submit & Publish</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+  <script>
+    const CONTRACT_ADDRESS = "0x9c05bea4a19de45fe9c8c5541dd4ec6c500f2f3f";
+    const CONTRACT_ABI = [
+      {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "inputs": [],
+        "name": "sendSupport",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+      }
+    ];
+
+    let provider;
+    let signer;
+    let contract;
+
+    async function connectWallet() {
+      if(window.ethereum) {
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        signer = provider.getSigner();
+        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+        alert("Wallet connected!");
+      } else {
+        alert("MetaMask is not installed");
+      }
     }
 
-    Supporter[] public supporters;
-
-    address public owner;
-
-    event NewSupport(address indexed supporter, uint256 amount);
-
-    constructor() {
-        owner = msg.sender;
+    async function sendSupport() {
+      if(!contract) {
+        alert("Connect your wallet first!");
+        return;
+      }
+      // Şu an ücretsiz, sadece cüzdan bağlı mı kontrol ediyor
+      alert("Support function triggered (free mode, no ETH sent).");
     }
-
-    // Destek gönderme fonksiyonu
-    function sendSupport() public payable {
-        require(msg.value > 0, "Support amount must be greater than 0");
-        supporters.push(Supporter(msg.sender, msg.value));
-        emit NewSupport(msg.sender, msg.value);
-    }
-
-    // Kontratta biriken toplam ether miktarı
-    function getTotalSupport() public view returns (uint256) {
-        uint256 total = 0;
-        for (uint256 i = 0; i < supporters.length; i++) {
-            total += supporters[i].amount;
-        }
-        return total;
-    }
-
-    // Owner kontratta biriken etheri çekebilir
-    function withdraw() public {
-        require(msg.sender == owner, "Only owner can withdraw");
-        payable(owner).transfer(address(this).balance);
-    }
-
-    // Destekçi sayısını döndür
-    function getSupporterCount() public view returns (uint256) {
-        return supporters.length;
-    }
-}
+  </script>
+</body>
+</html>
