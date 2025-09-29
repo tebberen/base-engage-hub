@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,18 +33,26 @@
     }
     .link-card {
       border: 2px solid #1d4ed8;
-      margin: 15px auto;
       padding: 20px;
-      width: 90%;
-      max-width: 600px;
       border-radius: 12px;
       background-color: #f8fafc;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       transition: all 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .link-card.featured {
       border-color: #f59e0b;
       background-color: #fffbeb;
+    }
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px auto;
+      max-width: 1200px;
     }
     button {
       background: #1d4ed8;
@@ -117,13 +124,13 @@
       color: #1d4ed8;
       font-size: 20px;
     }
-    .support-required {
-      background: #fef3c7;
-      border: 3px solid #f59e0b;
+    .step-container {
+      background: #f8fafc;
+      border: 2px solid #1d4ed8;
       padding: 25px;
       margin: 25px auto;
       width: 90%;
-      max-width: 600px;
+      max-width: 1000px;
       border-radius: 12px;
     }
     .hidden {
@@ -148,6 +155,7 @@
       border-radius: 8px;
       color: #065f46;
       font-weight: bold;
+      max-width: 600px;
     }
     .link-stats {
       display: flex;
@@ -177,13 +185,13 @@
       justify-content: center;
       margin-left: 10px;
     }
-    .gas-fee {
-      background: #ef4444;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 15px;
-      font-size: 12px;
-      margin-left: 10px;
+    .submit-form {
+      background: #f8fafc;
+      border: 2px solid #1d4ed8;
+      padding: 30px;
+      margin: 20px auto;
+      border-radius: 12px;
+      max-width: 600px;
     }
   </style>
 </head>
@@ -207,11 +215,11 @@
     <div class="step-indicator">
       <span class="step-number">1</span> Support Community Members
     </div>
-    <div class="support-required">
+    <div class="step-container">
       <h3>📋 Support Others First</h3>
       <p>To submit your link, you must first support at least one community member</p>
       
-      <div id="linksContainer">
+      <div class="links-grid" id="linksContainer">
         <!-- Links will be loaded here dynamically -->
       </div>
     </div>
@@ -227,7 +235,7 @@
       ✅ Thank you for supporting! Now submit your link (0.001 ETH fee)
     </div>
     
-    <div class="link-card">
+    <div class="submit-form">
       <h3>🎉 Add Your Content</h3>
       <input type="text" placeholder="Paste your X, Farcaster, GitHub, or any other link here..." id="userLink" />
       <br>
@@ -240,7 +248,7 @@
   <div class="step-indicator">
     🌟 Community Links (Newest First)
   </div>
-  <div id="submittedLinks">
+  <div class="links-grid" id="submittedLinks">
     <!-- Submitted links will appear here -->
   </div>
 
@@ -267,9 +275,7 @@
     ];
 
     // Submitted links with metadata
-    let submittedLinks = [
-      // Example: { link: "url", timestamp: 123456789, supportCount: 0, submitter: "0x123..." }
-    ];
+    let submittedLinks = [];
 
     // Contract configuration
     const CONTRACT_ADDRESS = "0x9c05bea4a19de45fe9c8c5541dd4ec6c500f2f3f";
@@ -292,13 +298,16 @@
       initialSupportLinks.forEach((link, index) => {
         const platform = getPlatformName(link);
         const linkCard = document.createElement('div');
-        linkCard.className = 'link-card';
         linkCard.innerHTML = `
-          <div class="link-platform">${platform}</div>
-          <a href="${link}" target="_blank" class="support-link" onclick="markAsSupported()">
-            ${link}
-          </a>
-          <button class="supportBtn" onclick="markAsSupported()">👍 Support This Content</button>
+          <div class="link-card">
+            <div>
+              <div class="link-platform">${platform}</div>
+              <a href="${link}" target="_blank" class="support-link" onclick="markAsSupported()">
+                ${link}
+              </a>
+            </div>
+            <button class="supportBtn" onclick="markAsSupported()">👍 Support This Content</button>
+          </div>
         `;
         container.appendChild(linkCard);
       });
@@ -309,14 +318,20 @@
       container.innerHTML = '';
       
       if (submittedLinks.length === 0) {
-        container.innerHTML = '<div class="link-card"><p>No links submitted yet. Be the first! 🚀</p></div>';
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1;">
+            <div class="link-card">
+              <p>No links submitted yet. Be the first! 🚀</p>
+            </div>
+          </div>
+        `;
         return;
       }
       
       // Sort by timestamp (newest first) and filter out links with 5+ supports
       const sortedLinks = submittedLinks
-        .filter(link => link.supportCount < 5) // Remove links with 5+ supports
-        .sort((a, b) => b.timestamp - a.timestamp); // Newest first
+        .filter(link => link.supportCount < 5)
+        .sort((a, b) => b.timestamp - a.timestamp);
       
       sortedLinks.forEach((linkData, index) => {
         const platform = getPlatformName(linkData.link);
@@ -324,27 +339,30 @@
         const isFeatured = linkData.supportCount >= 3;
         
         const linkCard = document.createElement('div');
-        linkCard.className = `link-card ${isFeatured ? 'featured' : ''}`;
         linkCard.innerHTML = `
-          <div class="link-platform">${platform}</div>
-          <a href="${linkData.link}" target="_blank" class="support-link">
-            ${linkData.link}
-          </a>
-          <div class="link-stats">
-            <div class="stat-item">
-              <div>Supports</div>
-              <div class="stat-value">${linkData.supportCount}/5</div>
+          <div class="link-card ${isFeatured ? 'featured' : ''}">
+            <div>
+              <div class="link-platform">${platform}</div>
+              <a href="${linkData.link}" target="_blank" class="support-link">
+                ${linkData.link}
+              </a>
             </div>
-            <div class="stat-item">
-              <div>Submitted</div>
-              <div class="stat-value">${submitDate}</div>
+            <div class="link-stats">
+              <div class="stat-item">
+                <div>Supports</div>
+                <div class="stat-value">${linkData.supportCount}/5</div>
+              </div>
+              <div class="stat-item">
+                <div>Submitted</div>
+                <div class="stat-value">${submitDate}</div>
+              </div>
+              <div class="stat-item">
+                <div>By</div>
+                <div class="stat-value">${linkData.submitter.substring(0, 6)}...</div>
+              </div>
             </div>
-            <div class="stat-item">
-              <div>By</div>
-              <div class="stat-value">${linkData.submitter.substring(0, 6)}...</div>
-            </div>
+            ${isFeatured ? '<div style="color: #f59e0b; margin-top: 10px; text-align: center;">⭐ Featured Content</div>' : ''}
           </div>
-          ${isFeatured ? '<div style="color: #f59e0b; margin-top: 10px;">⭐ Featured Content</div>' : ''}
         `;
         container.appendChild(linkCard);
       });
@@ -433,7 +451,7 @@
         // Wait for confirmation
         await tx.wait();
         
-        // Add to local storage (in real app, this would come from contract events)
+        // Add to local storage
         const newLink = {
           link: userLink,
           timestamp: Date.now(),
@@ -465,7 +483,7 @@
       }
     }
 
-    // Simulate support clicks (in real app, this would be from contract events)
+    // Simulate support clicks
     function simulateSupportClicks() {
       setInterval(() => {
         if (submittedLinks.length > 0) {
@@ -474,14 +492,9 @@
             submittedLinks[randomIndex].supportCount++;
             console.log(`Support added to: ${submittedLinks[randomIndex].link}`);
             displaySubmittedLinks();
-            
-            // Check if link reached 5 supports and remove it
-            if (submittedLinks[randomIndex].supportCount >= 5) {
-              console.log(`Link removed (5 supports reached): ${submittedLinks[randomIndex].link}`);
-            }
           }
         }
-      }, 30000); // Every 30 seconds
+      }, 30000);
     }
 
     // Event listeners
@@ -492,7 +505,7 @@
     window.addEventListener('load', function() {
       displaySupportLinks();
       displaySubmittedLinks();
-      simulateSupportClicks(); // Start simulating support clicks
+      simulateSupportClicks();
       
       // Check for existing wallet connection
       if (checkMetaMask()) {
@@ -528,3 +541,4 @@
 </body>
 </html>
 ```
+Artık linkler düzenli ızgara şeklinde ve sarı kutu olmadan! 🚀
