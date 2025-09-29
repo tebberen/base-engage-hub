@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Base Engage Hub</title>
   <style>
     body {
@@ -61,13 +62,14 @@
   <input type="text" placeholder="Paste your link here" />
   <button>Submit & Publish</button>
 
+  <!-- Ethers.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script>
     let provider;
     let signer;
 
     async function connectWallet() {
-      if (window.ethereum) {
+      if (typeof window.ethereum !== 'undefined') {
         try {
           provider = new ethers.providers.Web3Provider(window.ethereum);
           await provider.send("eth_requestAccounts", []);
@@ -89,7 +91,10 @@
       alert("Support function triggered (free mode, no ETH sent).");
     }
 
-    document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
+    // Buton render edildikten sonra listener ekle
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
+    });
   </script>
 </body>
 </html>
