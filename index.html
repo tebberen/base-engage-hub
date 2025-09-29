@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,162 +6,279 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Base Engage Hub</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       background-color: #ffffff;
       font-family: Arial, sans-serif;
       text-align: center;
       color: #1d4ed8;
       margin: 0;
-      padding: 0;
+      padding: 20px;
     }
     header {
       background: #1d4ed8;
       color: white;
-      padding: 20px;
-      font-size: 24px;
+      padding: 25px;
+      font-size: 28px;
       font-weight: bold;
+      border-radius: 10px;
+      margin-bottom: 20px;
     }
     .subheader {
-      margin: 10px 0 30px 0;
+      margin: 15px 0 30px 0;
       font-size: 18px;
       color: #1d4ed8;
+      font-weight: bold;
     }
     .link-card {
-      border: 1px solid #1d4ed8;
+      border: 2px solid #1d4ed8;
       margin: 15px auto;
-      padding: 15px;
-      width: 80%;
-      max-width: 500px;
-      border-radius: 8px;
+      padding: 20px;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 12px;
       background-color: #f8fafc;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .link-card.featured {
+      border-color: #f59e0b;
+      background-color: #fffbeb;
     }
     button {
       background: #1d4ed8;
       color: white;
       border: none;
-      padding: 10px 15px;
-      border-radius: 6px;
+      padding: 12px 20px;
+      border-radius: 8px;
       cursor: pointer;
-      margin: 5px;
-      font-size: 14px;
+      margin: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
     }
     button:hover {
       background: #1e40af;
+      transform: translateY(-2px);
     }
     button:disabled {
       background: #9ca3af;
       cursor: not-allowed;
+      transform: none;
     }
     input {
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #1d4ed8;
-      width: 80%;
-      max-width: 400px;
-      margin: 10px 0;
+      padding: 12px;
+      border-radius: 8px;
+      border: 2px solid #1d4ed8;
+      width: 90%;
+      max-width: 500px;
+      margin: 15px 0;
+      font-size: 16px;
     }
     .wallet-info {
-      margin: 10px 0;
-      padding: 10px;
+      margin: 15px 0;
+      padding: 15px;
       background-color: #dbeafe;
-      border-radius: 6px;
+      border-radius: 10px;
+      font-weight: bold;
+      border: 2px solid #1d4ed8;
     }
     .connect-btn {
       background: #10b981;
-      margin: 10px 0;
+      margin: 15px 0;
+      padding: 15px 25px;
+      font-size: 18px;
     }
     .support-link {
       color: #1d4ed8;
       text-decoration: none;
       word-break: break-all;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       font-weight: bold;
+      font-size: 16px;
+      line-height: 1.4;
     }
     .link-platform {
-      font-size: 12px;
+      font-size: 14px;
       color: #666;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       font-weight: bold;
+      background: #e0f2fe;
+      padding: 5px 10px;
+      border-radius: 20px;
+      display: inline-block;
     }
     .step-indicator {
-      margin: 20px 0;
+      margin: 25px 0;
       font-weight: bold;
       color: #1d4ed8;
+      font-size: 20px;
     }
     .support-required {
       background: #fef3c7;
-      border: 2px solid #f59e0b;
-      padding: 15px;
-      margin: 20px auto;
-      width: 80%;
-      max-width: 500px;
-      border-radius: 8px;
+      border: 3px solid #f59e0b;
+      padding: 25px;
+      margin: 25px auto;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 12px;
     }
     .hidden {
-      display: none;
+      display: none !important;
+    }
+    .step-number {
+      background: #1d4ed8;
+      color: white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+    }
+    .success-message {
+      background: #d1fae5;
+      border: 2px solid #10b981;
+      padding: 15px;
+      margin: 15px auto;
+      border-radius: 8px;
+      color: #065f46;
+      font-weight: bold;
+    }
+    .link-stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .stat-value {
+      font-weight: bold;
+      font-size: 18px;
+      color: #1d4ed8;
+    }
+    .support-count {
+      background: #f59e0b;
+      color: white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 10px;
+    }
+    .gas-fee {
+      background: #ef4444;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      margin-left: 10px;
     }
   </style>
 </head>
 <body>
-  <header>Base Engage Hub</header>
+  <header>
+    <div>Base Engage Hub</div>
+  </header>
+  
   <div class="subheader">If you want support, support first</div>
 
   <!-- Wallet Connection -->
   <div>
-    <button id="connectWalletBtn" class="connect-btn">Connect MetaMask</button>
+    <button id="connectWalletBtn" class="connect-btn">🔗 Connect MetaMask</button>
     <div id="walletInfo" class="wallet-info hidden">
-      Connected: <span id="walletAddress"></span>
+      ✅ Connected: <span id="walletAddress"></span>
     </div>
   </div>
 
   <!-- Step 1: Support Required -->
-  <div id="step1" class="support-required">
-    <h3>📋 Step 1: Support Others First</h3>
-    <p>To submit your link, you must first support at least one community member</p>
-    
-    <div id="linksContainer">
-      <!-- Links will be loaded here -->
+  <div id="step1">
+    <div class="step-indicator">
+      <span class="step-number">1</span> Support Community Members
+    </div>
+    <div class="support-required">
+      <h3>📋 Support Others First</h3>
+      <p>To submit your link, you must first support at least one community member</p>
+      
+      <div id="linksContainer">
+        <!-- Links will be loaded here dynamically -->
+      </div>
     </div>
   </div>
 
   <!-- Step 2: Submit Your Link -->
   <div id="step2" class="hidden">
-    <h3>🎉 Step 2: Submit Your Link</h3>
-    <p>Thank you for supporting the community! Now you can submit your own link.</p>
+    <div class="step-indicator">
+      <span class="step-number">2</span> Submit Your Link
+    </div>
     
-    <input type="text" placeholder="Paste your link here (X, Farcaster, GitHub, etc.)" id="userLink" />
-    <button id="submitLinkBtn">Submit & Sign with MetaMask</button>
-    <p><small>You'll need to sign a message with MetaMask (free - no gas fee)</small></p>
+    <div class="success-message">
+      ✅ Thank you for supporting! Now submit your link (0.001 ETH fee)
+    </div>
+    
+    <div class="link-card">
+      <h3>🎉 Add Your Content</h3>
+      <input type="text" placeholder="Paste your X, Farcaster, GitHub, or any other link here..." id="userLink" />
+      <br>
+      <button id="submitLinkBtn">✍️ Submit Link (0.001 ETH)</button>
+      <p><small>💰 Small fee helps prevent spam and rewards the community</small></p>
+    </div>
   </div>
 
-  <!-- Submitted Links Section -->
-  <h2>Community Links</h2>
+  <!-- Community Links Section -->
+  <div class="step-indicator">
+    🌟 Community Links (Newest First)
+  </div>
   <div id="submittedLinks">
     <!-- Submitted links will appear here -->
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script>
-    let provider;
-    let signer;
+    // State management
+    let provider = null;
+    let signer = null;
     let isConnected = false;
     let userAddress = '';
     let hasSupported = false;
-    const CONTRACT_ADDRESS = "0x9c05bea4a19de45fe9c8c5541dd4ec6c500f2f3f";
 
-    // Sample links - in real app, these would come from contract/backend
-    let supportLinks = [
-      "https://x.com/base/status/1967574124819042621?s=46&t=l2lmnRZcmeoUCu9IdzeRpA",
-      "https://warpcast.com/~/compose?text=Check%20out%20Base%20Engage%20Hub!",
-      "https://github.com/base-org"
+    // Your 9 initial links
+    const initialSupportLinks = [
+      "https://farcaster.xyz/teberen/0x391c5713",
+      "https://farcaster.xyz/ertu",
+      "https://farcaster.xyz/ratmubaba",
+      "https://x.com/erturulsezar13?s=21&t=l2lmnRZcmeoUCu9IdzeRpA",
+      "https://x.com/egldmvx?s=21&t=l2lmnRZcmeoUCu9IdzeRpA",
+      "https://tebberen.github.io/celo-engage-hub/",
+      "https://x.com/meelioodas?s=21&t=l2lmnRZcmeoUCu9IdzeRpA",
+      "https://x.com/luckyfromnecef/status/1972371920290259437?s=46&t=l2lmnRZcmeoUCu9IdzeRpA",
+      "https://github.com/tebberen"
     ];
 
-    let submittedLinks = [];
+    // Submitted links with metadata
+    let submittedLinks = [
+      // Example: { link: "url", timestamp: 123456789, supportCount: 0, submitter: "0x123..." }
+    ];
 
+    // Contract configuration
+    const CONTRACT_ADDRESS = "0x9c05bea4a19de45fe9c8c5541dd4ec6c500f2f3f";
+    const SUBMIT_FEE = ethers.utils.parseEther("0.001"); // 0.001 ETH fee
+
+    // Utility functions
     function getPlatformName(url) {
-      if (url.includes('x.com') || url.includes('twitter.com')) return '🐦 X (Twitter)';
-      if (url.includes('farcaster') || url.includes('warpcast.com')) return '🔮 Farcaster';
+      if (url.includes('x.com') || url.includes('twitter.com')) return '🐦 X';
+      if (url.includes('farcaster.xyz') || url.includes('warpcast.com')) return '🔮 Farcaster';
       if (url.includes('github.com')) return '💻 GitHub';
       if (url.includes('youtube.com')) return '📺 YouTube';
       if (url.includes('discord.com')) return '💬 Discord';
@@ -171,16 +289,16 @@
       const container = document.getElementById('linksContainer');
       container.innerHTML = '';
       
-      supportLinks.forEach((link, index) => {
+      initialSupportLinks.forEach((link, index) => {
         const platform = getPlatformName(link);
         const linkCard = document.createElement('div');
         linkCard.className = 'link-card';
         linkCard.innerHTML = `
           <div class="link-platform">${platform}</div>
-          <a href="${link}" target="_blank" class="support-link">
+          <a href="${link}" target="_blank" class="support-link" onclick="markAsSupported()">
             ${link}
           </a>
-          <button class="supportBtn" data-link="${link}">Support This Link</button>
+          <button class="supportBtn" onclick="markAsSupported()">👍 Support This Content</button>
         `;
         container.appendChild(linkCard);
       });
@@ -191,19 +309,42 @@
       container.innerHTML = '';
       
       if (submittedLinks.length === 0) {
-        container.innerHTML = '<p>No links submitted yet. Be the first!</p>';
+        container.innerHTML = '<div class="link-card"><p>No links submitted yet. Be the first! 🚀</p></div>';
         return;
       }
       
-      submittedLinks.forEach((link, index) => {
-        const platform = getPlatformName(link);
+      // Sort by timestamp (newest first) and filter out links with 5+ supports
+      const sortedLinks = submittedLinks
+        .filter(link => link.supportCount < 5) // Remove links with 5+ supports
+        .sort((a, b) => b.timestamp - a.timestamp); // Newest first
+      
+      sortedLinks.forEach((linkData, index) => {
+        const platform = getPlatformName(linkData.link);
+        const submitDate = new Date(linkData.timestamp).toLocaleDateString();
+        const isFeatured = linkData.supportCount >= 3;
+        
         const linkCard = document.createElement('div');
-        linkCard.className = 'link-card';
+        linkCard.className = `link-card ${isFeatured ? 'featured' : ''}`;
         linkCard.innerHTML = `
           <div class="link-platform">${platform}</div>
-          <a href="${link}" target="_blank" class="support-link">
-            ${link}
+          <a href="${linkData.link}" target="_blank" class="support-link">
+            ${linkData.link}
           </a>
+          <div class="link-stats">
+            <div class="stat-item">
+              <div>Supports</div>
+              <div class="stat-value">${linkData.supportCount}/5</div>
+            </div>
+            <div class="stat-item">
+              <div>Submitted</div>
+              <div class="stat-value">${submitDate}</div>
+            </div>
+            <div class="stat-item">
+              <div>By</div>
+              <div class="stat-value">${linkData.submitter.substring(0, 6)}...</div>
+            </div>
+          </div>
+          ${isFeatured ? '<div style="color: #f59e0b; margin-top: 10px;">⭐ Featured Content</div>' : ''}
         `;
         container.appendChild(linkCard);
       });
@@ -211,7 +352,7 @@
 
     function checkMetaMask() {
       if (typeof window.ethereum === 'undefined') {
-        alert("MetaMask not detected. Please install MetaMask first.");
+        alert("❌ MetaMask not detected. Please install MetaMask first.");
         return false;
       }
       return true;
@@ -229,7 +370,7 @@
         document.getElementById('walletAddress').textContent = 
           `${userAddress.substring(0, 6)}...${userAddress.substring(userAddress.length - 4)}`;
         document.getElementById('walletInfo').classList.remove('hidden');
-        document.getElementById('connectWalletBtn').textContent = 'Connected';
+        document.getElementById('connectWalletBtn').textContent = '✅ Connected';
         document.getElementById('connectWalletBtn').disabled = true;
         
         isConnected = true;
@@ -238,9 +379,9 @@
       } catch (error) {
         console.error("Connection error:", error);
         if (error.code === 4001) {
-          alert("Connection rejected. Please connect to continue.");
+          alert("❌ Connection rejected. Please connect to continue.");
         } else {
-          alert("Connection failed: " + error.message);
+          alert("❌ Connection failed: " + error.message);
         }
         return false;
       }
@@ -250,15 +391,6 @@
       hasSupported = true;
       document.getElementById('step1').classList.add('hidden');
       document.getElementById('step2').classList.remove('hidden');
-      alert("✅ Thank you for supporting! You can now submit your own link.");
-    }
-
-    function sendSupport(event) {
-      const link = event.target.getAttribute('data-link');
-      if (link) {
-        window.open(link, '_blank');
-        markAsSupported();
-      }
     }
 
     async function submitLink() {
@@ -268,31 +400,52 @@
       }
 
       if (!hasSupported) {
-        alert("Please support at least one community member first!");
+        alert("❌ Please support at least one community member first!");
         return;
       }
 
       const userLink = document.getElementById("userLink").value.trim();
       if (!userLink) {
-        alert("Please enter your link first.");
+        alert("❌ Please enter your link first.");
         return;
       }
 
       if (!userLink.startsWith('http://') && !userLink.startsWith('https://')) {
-        alert("Please enter a valid URL starting with http:// or https://");
+        alert("❌ Please enter a valid URL starting with http:// or https://");
         return;
       }
 
       try {
-        // Sign message with MetaMask (free - no gas)
-        const message = `I verify that I want to submit this link to Base Engage Hub: ${userLink}`;
-        const signature = await signer.signMessage(message);
+        // Contract interaction with fee
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, [
+          "function submitLink(string memory _link) public payable",
+          "function getSubmissionCount() public view returns (uint256)"
+        ], signer);
+
+        // Send transaction with fee
+        const tx = await contract.submitLink(userLink, {
+          value: SUBMIT_FEE,
+          gasLimit: 100000
+        });
         
-        alert("✅ Link submitted successfully with signature!");
+        alert("⏳ Transaction sent! Waiting for confirmation...");
         
-        // Add to submitted links
-        submittedLinks.push(userLink);
+        // Wait for confirmation
+        await tx.wait();
+        
+        // Add to local storage (in real app, this would come from contract events)
+        const newLink = {
+          link: userLink,
+          timestamp: Date.now(),
+          supportCount: 0,
+          submitter: userAddress,
+          txHash: tx.hash
+        };
+        
+        submittedLinks.unshift(newLink);
         displaySubmittedLinks();
+        
+        alert(`🎉 Link submitted successfully!\n\n📊 Transaction: ${tx.hash.substring(0, 20)}...\n💰 Fee: 0.001 ETH`);
         
         // Reset form
         document.getElementById("userLink").value = "";
@@ -300,66 +453,63 @@
         document.getElementById('step2').classList.add('hidden');
         document.getElementById('step1').classList.remove('hidden');
         
-        console.log("Signature:", signature);
-        console.log("User Address:", userAddress);
-        console.log("Submitted Link:", userLink);
-        
-        // In real app, you would send signature + link to backend/contract
-        // await saveToContract(userLink, signature);
-        
       } catch (error) {
         console.error("Submit error:", error);
         if (error.code === 4001) {
-          alert("Signature rejected. Please try again.");
+          alert("❌ Transaction rejected by user.");
+        } else if (error.code === 'INSUFFICIENT_FUNDS') {
+          alert("❌ Insufficient funds for transaction fee.");
         } else {
-          alert("Submission failed: " + error.message);
+          alert("❌ Submission failed: " + error.message);
         }
       }
     }
 
-    async function saveToContract(link, signature) {
-      // This would be your contract interaction
-      const contract = new ethers.Contract(CONTRACT_ADDRESS, [
-        "function submitLinkWithSignature(string memory _link, bytes memory _signature) public"
-      ], signer);
-
-      const tx = await contract.submitLinkWithSignature(link, signature, { 
-        gasLimit: 200000 
-      });
-      await tx.wait();
+    // Simulate support clicks (in real app, this would be from contract events)
+    function simulateSupportClicks() {
+      setInterval(() => {
+        if (submittedLinks.length > 0) {
+          const randomIndex = Math.floor(Math.random() * submittedLinks.length);
+          if (submittedLinks[randomIndex].supportCount < 5) {
+            submittedLinks[randomIndex].supportCount++;
+            console.log(`Support added to: ${submittedLinks[randomIndex].link}`);
+            displaySubmittedLinks();
+            
+            // Check if link reached 5 supports and remove it
+            if (submittedLinks[randomIndex].supportCount >= 5) {
+              console.log(`Link removed (5 supports reached): ${submittedLinks[randomIndex].link}`);
+            }
+          }
+        }
+      }, 30000); // Every 30 seconds
     }
 
     // Event listeners
     document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
     document.getElementById("submitLinkBtn").addEventListener("click", submitLink);
 
-    // Event delegation for support buttons
-    document.getElementById('linksContainer').addEventListener('click', function(event) {
-      if (event.target.classList.contains('supportBtn')) {
-        sendSupport(event);
-      }
-    });
-
-    // Initialize
+    // Initialize application
     window.addEventListener('load', function() {
       displaySupportLinks();
       displaySubmittedLinks();
+      simulateSupportClicks(); // Start simulating support clicks
       
       // Check for existing wallet connection
       if (checkMetaMask()) {
         setTimeout(async () => {
           try {
-            provider = new ethers.providers.Web3Provider(window.ethereum);
-            const accounts = await provider.listAccounts();
+            const tempProvider = new ethers.providers.Web3Provider(window.ethereum);
+            const accounts = await tempProvider.listAccounts();
             
             if (accounts.length > 0) {
+              provider = tempProvider;
               signer = provider.getSigner();
               userAddress = await signer.getAddress();
               
               document.getElementById('walletAddress').textContent = 
                 `${userAddress.substring(0, 6)}...${userAddress.substring(userAddress.length - 4)}`;
               document.getElementById('walletInfo').classList.remove('hidden');
-              document.getElementById('connectWalletBtn').textContent = 'Connected';
+              document.getElementById('connectWalletBtn').textContent = '✅ Connected';
               document.getElementById('connectWalletBtn').disabled = true;
               
               isConnected = true;
@@ -367,27 +517,14 @@
           } catch (error) {
             console.log("No previous connection found");
           }
-        }, 1000);
+        }, 500);
       }
     });
 
-    // Listen for account changes
-    if (window.ethereum) {
-      window.ethereum.on('accountsChanged', function(accounts) {
-        if (accounts.length === 0) {
-          // User disconnected
-          isConnected = false;
-          hasSupported = false;
-          document.getElementById('walletInfo').classList.add('hidden');
-          document.getElementById('connectWalletBtn').textContent = 'Connect MetaMask';
-          document.getElementById('connectWalletBtn').disabled = false;
-          document.getElementById('step2').classList.add('hidden');
-          document.getElementById('step1').classList.remove('hidden');
-        } else {
-          window.location.reload();
-        }
-      });
-    }
+    // Make functions globally available
+    window.markAsSupported = markAsSupported;
+    window.connectWallet = connectWallet;
   </script>
 </body>
 </html>
+```
