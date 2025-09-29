@@ -1,6 +1,3 @@
-Metamask bağlanmama sorununu inceledim. İşte düzeltilmiş ve çalışan kod:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,9 +27,10 @@ Metamask bağlanmama sorununu inceledim. İşte düzeltilmiş ve çalışan kod:
     }
     .link-card {
       border: 1px solid #1d4ed8;
-      margin: 10px auto;
+      margin: 15px auto;
       padding: 15px;
-      width: 60%;
+      width: 80%;
+      max-width: 500px;
       border-radius: 8px;
       background-color: #f8fafc;
     }
@@ -57,7 +55,8 @@ Metamask bağlanmama sorununu inceledim. İşte düzeltilmiş ve çalışan kod:
       padding: 10px;
       border-radius: 6px;
       border: 1px solid #1d4ed8;
-      width: 50%;
+      width: 80%;
+      max-width: 400px;
       margin: 10px 0;
     }
     .wallet-info {
@@ -65,11 +64,41 @@ Metamask bağlanmama sorununu inceledim. İşte düzeltilmiş ve çalışan kod:
       padding: 10px;
       background-color: #dbeafe;
       border-radius: 6px;
-      display: none;
     }
     .connect-btn {
       background: #10b981;
       margin: 10px 0;
+    }
+    .support-link {
+      color: #1d4ed8;
+      text-decoration: none;
+      word-break: break-all;
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .link-platform {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    .step-indicator {
+      margin: 20px 0;
+      font-weight: bold;
+      color: #1d4ed8;
+    }
+    .support-required {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      padding: 15px;
+      margin: 20px auto;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 8px;
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
@@ -77,32 +106,109 @@ Metamask bağlanmama sorununu inceledim. İşte düzeltilmiş ve çalışan kod:
   <header>Base Engage Hub</header>
   <div class="subheader">If you want support, support first</div>
 
-  <!-- Wallet Connection Section -->
+  <!-- Wallet Connection -->
   <div>
     <button id="connectWalletBtn" class="connect-btn">Connect MetaMask</button>
-    <div id="walletInfo" class="wallet-info">
-      <span id="walletAddress"></span>
+    <div id="walletInfo" class="wallet-info hidden">
+      Connected: <span id="walletAddress"></span>
     </div>
   </div>
 
-  <h2>Support Links</h2>
-  <div class="link-card">
-    <p>https://twitter.com/example/post</p>
-    <button class="supportBtn">Support</button>
+  <!-- Step 1: Support Required -->
+  <div id="step1" class="support-required">
+    <h3>📋 Step 1: Support Others First</h3>
+    <p>To submit your link, you must first support at least one community member</p>
+    
+    <div id="linksContainer">
+      <!-- Links will be loaded here -->
+    </div>
   </div>
 
-  <h2>Add Your Link</h2>
-  <input type="text" placeholder="Paste your link here" id="userLink" />
-  <button id="submitLinkBtn">Submit & Publish</button>
+  <!-- Step 2: Submit Your Link -->
+  <div id="step2" class="hidden">
+    <h3>🎉 Step 2: Submit Your Link</h3>
+    <p>Thank you for supporting the community! Now you can submit your own link.</p>
+    
+    <input type="text" placeholder="Paste your link here (X, Farcaster, GitHub, etc.)" id="userLink" />
+    <button id="submitLinkBtn">Submit & Sign with MetaMask</button>
+    <p><small>You'll need to sign a message with MetaMask (free - no gas fee)</small></p>
+  </div>
+
+  <!-- Submitted Links Section -->
+  <h2>Community Links</h2>
+  <div id="submittedLinks">
+    <!-- Submitted links will appear here -->
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script>
     let provider;
     let signer;
     let isConnected = false;
+    let userAddress = '';
+    let hasSupported = false;
     const CONTRACT_ADDRESS = "0x9c05bea4a19de45fe9c8c5541dd4ec6c500f2f3f";
 
-    // Check if MetaMask is installed
+    // Sample links - in real app, these would come from contract/backend
+    let supportLinks = [
+      "https://x.com/base/status/1967574124819042621?s=46&t=l2lmnRZcmeoUCu9IdzeRpA",
+      "https://warpcast.com/~/compose?text=Check%20out%20Base%20Engage%20Hub!",
+      "https://github.com/base-org"
+    ];
+
+    let submittedLinks = [];
+
+    function getPlatformName(url) {
+      if (url.includes('x.com') || url.includes('twitter.com')) return '🐦 X (Twitter)';
+      if (url.includes('farcaster') || url.includes('warpcast.com')) return '🔮 Farcaster';
+      if (url.includes('github.com')) return '💻 GitHub';
+      if (url.includes('youtube.com')) return '📺 YouTube';
+      if (url.includes('discord.com')) return '💬 Discord';
+      return '🌐 Website';
+    }
+
+    function displaySupportLinks() {
+      const container = document.getElementById('linksContainer');
+      container.innerHTML = '';
+      
+      supportLinks.forEach((link, index) => {
+        const platform = getPlatformName(link);
+        const linkCard = document.createElement('div');
+        linkCard.className = 'link-card';
+        linkCard.innerHTML = `
+          <div class="link-platform">${platform}</div>
+          <a href="${link}" target="_blank" class="support-link">
+            ${link}
+          </a>
+          <button class="supportBtn" data-link="${link}">Support This Link</button>
+        `;
+        container.appendChild(linkCard);
+      });
+    }
+
+    function displaySubmittedLinks() {
+      const container = document.getElementById('submittedLinks');
+      container.innerHTML = '';
+      
+      if (submittedLinks.length === 0) {
+        container.innerHTML = '<p>No links submitted yet. Be the first!</p>';
+        return;
+      }
+      
+      submittedLinks.forEach((link, index) => {
+        const platform = getPlatformName(link);
+        const linkCard = document.createElement('div');
+        linkCard.className = 'link-card';
+        linkCard.innerHTML = `
+          <div class="link-platform">${platform}</div>
+          <a href="${link}" target="_blank" class="support-link">
+            ${link}
+          </a>
+        `;
+        container.appendChild(linkCard);
+      });
+    }
+
     function checkMetaMask() {
       if (typeof window.ethereum === 'undefined') {
         alert("MetaMask not detected. Please install MetaMask first.");
@@ -111,28 +217,22 @@ Metamask bağlanmama sorununu inceledim. İşte düzeltilmiş ve çalışan kod:
       return true;
     }
 
-    // Connect Wallet Function
     async function connectWallet() {
       if (!checkMetaMask()) return false;
 
       try {
         provider = new ethers.providers.Web3Provider(window.ethereum);
-        
-        // Request account access
         await window.ethereum.request({ method: 'eth_requestAccounts' });
-        
         signer = provider.getSigner();
-        const address = await signer.getAddress();
+        userAddress = await signer.getAddress();
         
-        // Update UI
         document.getElementById('walletAddress').textContent = 
-          `Connected: ${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
-        document.getElementById('walletInfo').style.display = 'block';
+          `${userAddress.substring(0, 6)}...${userAddress.substring(userAddress.length - 4)}`;
+        document.getElementById('walletInfo').classList.remove('hidden');
         document.getElementById('connectWalletBtn').textContent = 'Connected';
         document.getElementById('connectWalletBtn').disabled = true;
         
         isConnected = true;
-        console.log("Wallet connected:", address);
         return true;
         
       } catch (error) {
@@ -146,41 +246,30 @@ Metamask bağlanmama sorununu inceledim. İşte düzeltilmiş ve çalışan kod:
       }
     }
 
-    // Support Function
-    async function sendSupport() {
-      if (!isConnected) {
-        const connected = await connectWallet();
-        if (!connected) return;
-      }
+    function markAsSupported() {
+      hasSupported = true;
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('step2').classList.remove('hidden');
+      alert("✅ Thank you for supporting! You can now submit your own link.");
+    }
 
-      try {
-        const contract = new ethers.Contract(CONTRACT_ADDRESS, [
-          "function support() public"
-        ], signer);
-
-        const tx = await contract.support({ 
-          gasLimit: 100000 
-        });
-        
-        alert("Support transaction sent! Waiting for confirmation...");
-        await tx.wait();
-        alert("Support transaction confirmed!");
-        
-      } catch (error) {
-        console.error("Support error:", error);
-        if (error.code === 4001) {
-          alert("Transaction was rejected.");
-        } else {
-          alert("Transaction failed: " + error.message);
-        }
+    function sendSupport(event) {
+      const link = event.target.getAttribute('data-link');
+      if (link) {
+        window.open(link, '_blank');
+        markAsSupported();
       }
     }
 
-    // Submit Link Function
     async function submitLink() {
       if (!isConnected) {
         const connected = await connectWallet();
         if (!connected) return;
+      }
+
+      if (!hasSupported) {
+        alert("Please support at least one community member first!");
+        return;
       }
 
       const userLink = document.getElementById("userLink").value.trim();
@@ -189,60 +278,96 @@ Metamask bağlanmama sorununu inceledim. İşte düzeltilmiş ve çalışan kod:
         return;
       }
 
-      try {
-        const contract = new ethers.Contract(CONTRACT_ADDRESS, [
-          "function submitLink(string memory _link) public"
-        ], signer);
+      if (!userLink.startsWith('http://') && !userLink.startsWith('https://')) {
+        alert("Please enter a valid URL starting with http:// or https://");
+        return;
+      }
 
-        const tx = await contract.submitLink(userLink, { 
-          gasLimit: 200000 
-        });
+      try {
+        // Sign message with MetaMask (free - no gas)
+        const message = `I verify that I want to submit this link to Base Engage Hub: ${userLink}`;
+        const signature = await signer.signMessage(message);
         
-        alert("Link submission sent! Waiting for confirmation...");
-        await tx.wait();
-        alert("Your link has been submitted successfully!");
+        alert("✅ Link submitted successfully with signature!");
+        
+        // Add to submitted links
+        submittedLinks.push(userLink);
+        displaySubmittedLinks();
+        
+        // Reset form
         document.getElementById("userLink").value = "";
+        hasSupported = false;
+        document.getElementById('step2').classList.add('hidden');
+        document.getElementById('step1').classList.remove('hidden');
+        
+        console.log("Signature:", signature);
+        console.log("User Address:", userAddress);
+        console.log("Submitted Link:", userLink);
+        
+        // In real app, you would send signature + link to backend/contract
+        // await saveToContract(userLink, signature);
         
       } catch (error) {
-        console.error("Submit link error:", error);
+        console.error("Submit error:", error);
         if (error.code === 4001) {
-          alert("Transaction was rejected.");
+          alert("Signature rejected. Please try again.");
         } else {
-          alert("Transaction failed: " + error.message);
+          alert("Submission failed: " + error.message);
         }
       }
     }
 
-    // Event Listeners
+    async function saveToContract(link, signature) {
+      // This would be your contract interaction
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, [
+        "function submitLinkWithSignature(string memory _link, bytes memory _signature) public"
+      ], signer);
+
+      const tx = await contract.submitLinkWithSignature(link, signature, { 
+        gasLimit: 200000 
+      });
+      await tx.wait();
+    }
+
+    // Event listeners
     document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
-    document.querySelectorAll(".supportBtn").forEach(btn => {
-      btn.addEventListener("click", sendSupport);
-    });
     document.getElementById("submitLinkBtn").addEventListener("click", submitLink);
 
-    // Check if wallet is already connected on page load
-    window.addEventListener('load', async function() {
+    // Event delegation for support buttons
+    document.getElementById('linksContainer').addEventListener('click', function(event) {
+      if (event.target.classList.contains('supportBtn')) {
+        sendSupport(event);
+      }
+    });
+
+    // Initialize
+    window.addEventListener('load', function() {
+      displaySupportLinks();
+      displaySubmittedLinks();
+      
+      // Check for existing wallet connection
       if (checkMetaMask()) {
-        try {
-          provider = new ethers.providers.Web3Provider(window.ethereum);
-          const accounts = await provider.listAccounts();
-          
-          if (accounts.length > 0) {
-            signer = provider.getSigner();
-            const address = await signer.getAddress();
+        setTimeout(async () => {
+          try {
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            const accounts = await provider.listAccounts();
             
-            document.getElementById('walletAddress').textContent = 
-              `Connected: ${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
-            document.getElementById('walletInfo').style.display = 'block';
-            document.getElementById('connectWalletBtn').textContent = 'Connected';
-            document.getElementById('connectWalletBtn').disabled = true;
-            
-            isConnected = true;
-            console.log("Auto-connected to wallet:", address);
+            if (accounts.length > 0) {
+              signer = provider.getSigner();
+              userAddress = await signer.getAddress();
+              
+              document.getElementById('walletAddress').textContent = 
+                `${userAddress.substring(0, 6)}...${userAddress.substring(userAddress.length - 4)}`;
+              document.getElementById('walletInfo').classList.remove('hidden');
+              document.getElementById('connectWalletBtn').textContent = 'Connected';
+              document.getElementById('connectWalletBtn').disabled = true;
+              
+              isConnected = true;
+            }
+          } catch (error) {
+            console.log("No previous connection found");
           }
-        } catch (error) {
-          console.log("No previous connection found");
-        }
+        }, 1000);
       }
     });
 
@@ -250,13 +375,15 @@ Metamask bağlanmama sorununu inceledim. İşte düzeltilmiş ve çalışan kod:
     if (window.ethereum) {
       window.ethereum.on('accountsChanged', function(accounts) {
         if (accounts.length === 0) {
-          // User disconnected wallet
+          // User disconnected
           isConnected = false;
-          document.getElementById('walletInfo').style.display = 'none';
+          hasSupported = false;
+          document.getElementById('walletInfo').classList.add('hidden');
           document.getElementById('connectWalletBtn').textContent = 'Connect MetaMask';
           document.getElementById('connectWalletBtn').disabled = false;
+          document.getElementById('step2').classList.add('hidden');
+          document.getElementById('step1').classList.remove('hidden');
         } else {
-          // Account changed, reload page
           window.location.reload();
         }
       });
@@ -264,21 +391,3 @@ Metamask bağlanmama sorununu inceledim. İşte düzeltilmiş ve çalışan kod:
   </script>
 </body>
 </html>
-```
-
-🎯 Ana Düzeltmeler:
-
-1. Ayrı Connect Butonu: Wallet bağlantısı için özel buton eklendi
-2. Otomatik Bağlantı Kontrolü: Sayfa yüklendiğinde önceden bağlı wallet'ı kontrol eder
-3. Daha İyi Hata Yönetimi: Tüm hataları yakalar ve kullanıcıya bilgi verir
-4. Wallet Bilgisi Gösterimi: Bağlı wallet adresini gösterir
-5. Account Değişikliklerini Dinleme: Kullanıcı wallet değiştirirse sayfayı yeniler
-6. UI İyileştirmeleri: Daha kullanıcı dostu arayüz
-
-🔧 Test Etmeden Önce Kontrol Edin:
-
-1. MetaMask Kurulu mu? Browserınızda MetaMask eklentisi aktif olmalı
-2. Base Network: MetaMask'ta Base network'ü ekli ve seçili olmalı
-3. Contract Adresi: CONTRACT_ADDRESS değerinin doğru olduğundan emin olun
-
-Bu kod artık düzgün çalışmalı! 🚀
